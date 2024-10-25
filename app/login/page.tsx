@@ -10,7 +10,7 @@ import { loginUser } from '@/lib/api/auth'; // Import the loginUser function
 import { saveToken } from '@/lib/utilities/token'; // Import the token utility functions
 import { useRouter } from 'next/navigation';
 import { FaSpinner } from 'react-icons/fa';
-export const LoginPage: React.FC = () => {
+export const LoginPage = () => {
   const [loading,setLoading] = useState(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
