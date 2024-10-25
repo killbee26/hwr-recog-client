@@ -10,10 +10,7 @@ import { loginUser } from '@/lib/api/auth'; // Import the loginUser function
 import { saveToken } from '@/lib/utilities/token'; // Import the token utility functions
 import { useRouter } from 'next/navigation';
 import { FaSpinner } from 'react-icons/fa';
-export const description =
-  "A login page with two columns. The first column has the login form with email and password. There's a Forgot your password link and a link to sign up if you do not have an account. The second column has a cover image.";
-
-const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = () => {
   const [loading,setLoading] = useState(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
