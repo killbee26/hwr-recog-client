@@ -18,7 +18,7 @@ const Navbar = () => {
     const fetchAvatar = async () => {
       try {
         const token = localStorage.getItem("token"); // Retrieve the token if needed
-        const response = await apiClient.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/getUserAvatar`);
+        const response = await apiClient.get(`/api/users/getUserAvatar`);
         setAvatarUrl(response.data.avatarUrl); // Assuming the API returns an object with avatarUrl
       } catch (error) {
         console.error("Error fetching avatar:", error);

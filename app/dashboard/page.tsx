@@ -43,7 +43,7 @@ const DashboardPage = () => {
       setIsLoading(true);
       setProgress(0); // Reset progress
       // Post the image and description to the backend
-      const { data } = await apiClient.post(`${API_URL}/api/files/upload`, formData, {
+      const { data } = await apiClient.post(`/api/files/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
           const total = progressEvent.total || 1; // Avoid division by zero

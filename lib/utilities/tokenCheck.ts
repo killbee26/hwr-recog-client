@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+
 import { useRouter } from 'next/navigation';
 import { getToken } from './token';
-
+import apiClient from './apiClient';
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const useTokenCheck = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
@@ -18,7 +19,7 @@ const useTokenCheck = () => {
             }
 
             try {
-                const response = await axios.get('http://localhost:5000/api/users/verifyToken', {
+                const response = await apiClient.get(`/api/users/verifyToken`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (response.data.valid) {
