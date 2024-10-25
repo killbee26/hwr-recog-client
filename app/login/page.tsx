@@ -81,9 +81,6 @@ const LoginPage: React.FC = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <FaSpinner className='animate-spin '/> : 'Login'}
             </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
-            </Button>
           </form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
@@ -95,7 +92,7 @@ const LoginPage: React.FC = () => {
       </div>
       <div className="hidden bg-muted lg:block">
         <Image
-          src="/placeholder.svg"
+          src="/hwr-recog-static.jpg"
           alt="Image"
           width="1920"
           height="1080"

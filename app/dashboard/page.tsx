@@ -1,16 +1,22 @@
+
 "use client";
+import { FaSpinner } from 'react-icons/fa';
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import ProgressBar from '@/components/custom/progressbar'; // Import your ProgressBar component
+import apiClient from "@/lib/utilities/apiClient";
 
 const DashboardPage = () => {
+  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0); // State for progress
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -35,9 +41,15 @@ const DashboardPage = () => {
 
     try {
       setIsLoading(true);
+      setProgress(0); // Reset progress
       // Post the image and description to the backend
-      const { data } = await axios.post("/api/upload", formData, {
+      const { data } = await apiClient.post(`${API_URL}/api/files/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (progressEvent) => {
+          const total = progressEvent.total || 1; // Avoid division by zero
+          const current = progressEvent.loaded;
+          setProgress(Math.round((current / total) * 100)); // Calculate progress percentage
+        },
       });
 
       // Assuming the API returns the extracted text from Google Vision API
@@ -46,6 +58,7 @@ const DashboardPage = () => {
       console.error("Error uploading image:", error);
     } finally {
       setIsLoading(false);
+      setProgress(100);
     }
   };
 
@@ -54,7 +67,7 @@ const DashboardPage = () => {
       {/* Card 1: Form to upload image */}
       <Card className="w-full lg:w-1/3">
         <CardHeader>
-          <CardTitle>Upload Image</CardTitle>
+          <CardTitle>Upload Image & Process</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -90,7 +103,8 @@ const DashboardPage = () => {
               </label>
             </div>
             <Button onClick={handleImageUpload} disabled={isLoading}>
-              {isLoading ? "Uploading..." : "Upload"}
+              {isLoading ? <FaSpinner className='animate-spin mr-2'/> : "Upload & Process"}
+              {isLoading && <ProgressBar progress={progress} />}
             </Button>
           </div>
         </CardContent>

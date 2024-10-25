@@ -5,19 +5,34 @@ import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import axios from "axios"; // Make sure to import axios for API calls
+import apiClient from "@/lib/utilities/apiClient";
 
 const Navbar = () => {
   const [isClient, setIsClient] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("/user-avatar-placeholder.png"); // Default placeholder
 
   useEffect(() => {
     setIsClient(true); // Ensure client-side only code executes
+
+    const fetchAvatar = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Retrieve the token if needed
+        const response = await apiClient.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/getUserAvatar`);
+        setAvatarUrl(response.data.avatarUrl); // Assuming the API returns an object with avatarUrl
+      } catch (error) {
+        console.error("Error fetching avatar:", error);
+      }
+    };
+
+    fetchAvatar(); // Call the fetch function
   }, []);
 
   const handleLogout = () => {
     if (isClient) {
       // Perform logout actions like clearing localStorage or calling an API
       console.log("User logged out");
-      localStorage.removeItem("authToken");
+      localStorage.removeItem("token");
       // Redirect to login page, for example
       window.location.href = "/login";
     }
@@ -41,19 +56,13 @@ const Navbar = () => {
                 {/* Use div or span instead of Button to avoid button inside button */}
                 <div className="cursor-pointer">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src="/user-avatar-placeholder.png" alt="User Avatar" />
+                    <AvatarImage src={avatarUrl} alt="User Avatar" />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent className="w-40 right-0 mt-2 bg-white shadow-lg rounded-lg text-black">
-                <DropdownMenuItem className="hover:bg-gray-100 p-2 cursor-pointer">
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-gray-100 p-2 cursor-pointer">
-                  <Link href="/settings">Settings</Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleLogout}
                   className="hover:bg-red-100 text-red-600 p-2 cursor-pointer"

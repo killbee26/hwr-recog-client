@@ -38,3 +38,4 @@ export const loginUser = async (credentials: LoginCredentials): Promise<any> => 
     throw error.response?.data || { message: 'Login failed' };
   }
 };
+

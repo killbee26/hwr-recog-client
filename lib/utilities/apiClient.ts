@@ -12,7 +12,7 @@ const apiClient = axios.create({
 // Add Authorization token to requests
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('authToken'); // Or use cookies if needed
+    const token = localStorage.getItem('token'); // Or use cookies if needed
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
